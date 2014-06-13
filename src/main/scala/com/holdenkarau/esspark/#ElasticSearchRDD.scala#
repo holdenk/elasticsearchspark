@@ -1,0 +1,6 @@
+/**
+ * A custom RDD which syncs the mapreduce.task.id with the partition ID. This partition ID is then used by the ES MR wrapper
+ * to direct the  
+ */
+
+package com.holdenkarau.esspark
