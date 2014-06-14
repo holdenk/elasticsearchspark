@@ -17,14 +17,12 @@ import org.elasticsearch.hadoop.cfg.ConfigurationOptions;
 object IndexTweetsLive {
   def main(args: Array[String]) {
     if (args.length < 5) {
-      System.err.println("Usage IndexTweetsLive <key> <secret key> <access token> <access token secret>  <es-resource> <es-nodes>")
+      System.err.println("Usage IndexTweetsLive <master> <key> <secret key> <access token> <access token secret>  <es-resource> <es-nodes>")
     }
-    val conf = new SparkConf
-    conf.setMaster(args(0))
-    conf.set("es.source", args(4))
-    conf.set(ConfigurationOptions.ES_NODES, args(5))
-    val sc = new SparkContext(conf)
-
-
+    val master = args(0)
+    val ssc = new StreamingContext(master, "IndexTweetsLive", Seconds(1))
+    val tweets = TwitterUtils.createStream(ssc, None)
+    ssc.start()
+    ssc.awaitTermination()
   }
 }

@@ -35,11 +35,6 @@ object ReIndexTweets {
     println("Using nodes "+args(6))
     val conf = new SparkConf
     conf.setMaster(args(0))
-    // This tells the ES MR output format to use the spark partition index as the node index
-    // This will degrade performance unless you have the same partition layout as ES in which case
-    // it should improve performance.
-    // Note: this is currently implemented as kind of a hack.
-    conf.set("es.sparkpartition", "true")
     val sc = new SparkContext(conf)
     val tweets = sc.parallelize(List(Map("user" -> "holdenkarau",
       "message" -> "stress pandas")))
@@ -49,6 +44,11 @@ object ReIndexTweets {
     jobConf.setOutputCommitter(classOf[FileOutputCommitter])
     jobConf.set(ConfigurationOptions.ES_RESOURCE_WRITE, args(5))
     jobConf.set(ConfigurationOptions.ES_NODES, args(6))
+    // This tells the ES MR output format to use the spark partition index as the node index
+    // This will degrade performance unless you have the same partition layout as ES in which case
+    // it should improve performance.
+    // Note: this is currently implemented as kind of a hack.
+    jobConf.set("es.sparkpartition", "true")
     FileOutputFormat.setOutputPath(jobConf, new Path("-"))
     output.saveAsHadoopDataset(jobConf)
   }
