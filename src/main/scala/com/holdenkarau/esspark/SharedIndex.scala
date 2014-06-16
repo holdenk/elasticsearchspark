@@ -17,8 +17,21 @@ object SharedIndex {
   // twitter helper methods
   def prepareTweets(tweet: twitter4j.Status) = {
     val fields = tweet.getGeoLocation() match {
-        case null => HashMap("docid" -> tweet.getId().toString, "content" -> tweet.getText())
-        case _ => HashMap("docid" -> tweet.getId().toString, "content" -> tweet.getText())
+        case null => HashMap(
+          "docid" -> tweet.getId().toString,
+          "content" -> tweet.getText(),
+          "hashTags" -> tweet.getHashtagEntities().map(_.getText()).mkString(" ")
+        )
+        case loc => {
+          val lat = loc.getLatitude()
+          val lon = loc.getLongitude()
+          HashMap(
+            "docid" -> tweet.getId().toString,
+            "content" -> tweet.getText(),
+            "hashTags" -> tweet.getHashtagEntities().map(_.getText()).mkString(" "),
+            "location" -> s"$lat,$lon"
+          )
+        }
       }
     mapToOutput(fields)
   }

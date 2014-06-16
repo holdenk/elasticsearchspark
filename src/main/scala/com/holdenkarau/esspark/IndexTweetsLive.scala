@@ -29,30 +29,16 @@ object IndexTweetsLive {
         case _ => "localhost"
     }
 
-    // Set up the system properties for twitter
-    System.setProperty("twitter4j.oauth.consumerKey", consumerKey)
-    System.setProperty("twitter4j.oauth.consumerSecret", consumerSecret)
-    System.setProperty("twitter4j.oauth.accessToken", accessToken)
-    System.setProperty("twitter4j.oauth.accessTokenSecret", accessTokenSecret)
+    SharedIndex.setupTwitter(consumerKey, consumerSecret, accessToken, accessTokenSecret)
 
     val ssc = new StreamingContext(master, "IndexTweetsLive", Seconds(1))
 
     val tweets = TwitterUtils.createStream(ssc, None)
     tweets.print()
-    val tweetsAsMap = tweets.map{ tweet =>
-      val
-      tweet.getGeoLocation() match {
-        case null => HashMap("docid" -> tweet.getId().toString, "content" -> tweet.getContet())
-        case _ => HashMap("docid" -> tweet.getId().toString, "content" -> tweet.getContet())
-      }
+    val tweetsAsMap = tweets.map(SharedIndex.prepareTweets)
     tweetsAsMap.foreachRDD{tweetRDD =>
       val sc = tweetRDD.context
-      val jobConf = new JobConf(sc.hadoopConfiguration)
-      jobConf.set("mapred.output.format.class", "org.elasticsearch.hadoop.mr.EsOutputFormat")
-      jobConf.setOutputCommitter(classOf[FileOutputCommitter])
-      jobConf.set(ConfigurationOptions.ES_RESOURCE_READ, args(1))
-      jobConf.set(ConfigurationOptions.ES_RESOURCE_WRITE, args(1))
-      jobConf.set(ConfigurationOptions.ES_NODES, args(2))
+      val jobConf = SharedESConfig.setupEsOnSparkContext(sc, esResource, Some(esNodes))
       tweetRDD.saveAsHadoopDataset(jobConf)
     }
     ssc.start()
