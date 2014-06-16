@@ -40,8 +40,8 @@ object TopTweetsInALocation {
     // Extract only the map
     // Convert the MapWritable[Text, Text] to Map[String, String]
     val tweets = currentTweets.map{ case (key, value) => SharedIndex.mapWritableToInput(value) }
-    println(tweets.collect().mkString(":"))
-    // Save the output
-    // output.saveAsHadoopDataset(jobConf)
+    // Extract the hash tags
+    val hashTags = tweets.map(_.get("hashTags").map(_.split(" ")).getOrElse(Nil))
+    println(hashTags.countByValue())
   }
 }
