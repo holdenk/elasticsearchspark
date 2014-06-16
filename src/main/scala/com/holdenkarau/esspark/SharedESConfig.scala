@@ -21,13 +21,12 @@ import org.apache.hadoop.io.{MapWritable, Text, NullWritable}
 
 
 object SharedESConfig {
-  def setupEsOnSparkContext(sc: SparkContext, esResource: String, esNodes: Option[String],
+  def setupEsOnSparkContext(sc: SparkContext, esResource: String, esNodes: Option[String] = None,
     esSparkPartition: Boolean = false) = {
     val jobConf = new JobConf(sc.hadoopConfiguration)
     jobConf.set("mapred.output.format.class", "org.elasticsearch.hadoop.mr.EsOutputFormat")
     jobConf.setOutputCommitter(classOf[FileOutputCommitter])
-    jobConf.set(ConfigurationOptions.ES_RESOURCE_READ, esResource)
-    jobConf.set(ConfigurationOptions.ES_RESOURCE_WRITE, esResource)
+    jobConf.set(ConfigurationOptions.ES_RESOURCE, esResource)
     esNodes match {
       case Some(node) => jobConf.set(ConfigurationOptions.ES_NODES, node)
       case _ => // Skip it
