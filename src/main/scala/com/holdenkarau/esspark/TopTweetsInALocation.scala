@@ -46,11 +46,8 @@ object TopTweetsInALocation {
     val tweets = currentTweets.map{ case (key, value) => SharedIndex.mapWritableToInput(value) }
     // Extract the hash tags
     val hashTags = tweets.flatMap{tweet =>
-      val tags = tweet.getOrElse("hashTags", "")
-      tags match {
-        case null => Nil
-        case _ => tags.split(" ")
-      }}.filter(_ != "(null)")
+      tweet.getOrElse("hashTags", "").split(" ")
+    }
     val hashTagCounts = hashTags.countByValue()
     // Extract the top words
     val words = tweets.flatMap{tweet =>
