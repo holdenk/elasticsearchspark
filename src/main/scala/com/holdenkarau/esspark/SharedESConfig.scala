@@ -23,6 +23,7 @@ import org.apache.hadoop.io.{MapWritable, Text, NullWritable}
 object SharedESConfig {
   def setupEsOnSparkContext(sc: SparkContext, esResource: String, esNodes: Option[String] = None,
     esSparkPartition: Boolean = false) = {
+    println("panda Creating configuration to write to "+esResource+" on "+esNodes)
     val jobConf = new JobConf(sc.hadoopConfiguration)
     jobConf.set("mapred.output.format.class", "org.elasticsearch.hadoop.mr.EsOutputFormat")
     jobConf.setOutputCommitter(classOf[FileOutputCommitter])

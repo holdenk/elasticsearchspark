@@ -16,10 +16,11 @@ import twitter4j.TwitterFactory
 object SharedIndex {
   // twitter helper methods
   def prepareTweets(tweet: twitter4j.Status) = {
+    println("panda preparing tweet!")
     val fields = tweet.getGeoLocation() match {
         case null => HashMap(
           "docid" -> tweet.getId().toString,
-          "content" -> tweet.getText(),
+          "message" -> tweet.getText(),
           "hashTags" -> tweet.getHashtagEntities().map(_.getText()).mkString(" ")
         )
         case loc => {
@@ -27,13 +28,14 @@ object SharedIndex {
           val lon = loc.getLongitude()
           HashMap(
             "docid" -> tweet.getId().toString,
-            "content" -> tweet.getText(),
+            "message" -> tweet.getText(),
             "hashTags" -> tweet.getHashtagEntities().map(_.getText()).mkString(" "),
             "location" -> s"$lat,$lon"
           )
         }
       }
-    mapToOutput(fields)
+    val output = mapToOutput(fields)
+    output
   }
 
   def setupTwitter(consumerKey: String, consumerSecret: String, accessToken: String, accessTokenSecret: String) ={
