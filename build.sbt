@@ -12,7 +12,7 @@ scalaVersion := "2.10.4"
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % "1.0.0",
   "org.apache.spark" %% "spark-streaming" % "1.0.0",
-  "org.apache.spark" %% "spark-streaming-twitter" % "1.0.0",
+  "org.apache.spark" %% "spark-streaming-twitter" % "1.0.0" excludeAll(ExclusionRule(organization = "org.twitter4j")),
   "org.apache.commons" % "commons-lang3" % "3.0",
   "org.eclipse.jetty"  % "jetty-client" % "8.1.14.v20131031",
   "com.typesafe.play" % "play-json_2.10" % "2.2.1",
@@ -21,7 +21,8 @@ libraryDependencies ++= Seq(
   "net.sf.opencsv" % "opencsv" % "2.0",
   "com.twitter.elephantbird" % "elephant-bird" % "4.5",
   "com.twitter.elephantbird" % "elephant-bird-core" % "4.5",
-  "com.hadoop.gplcompression" % "hadoop-lzo" % "0.4.17"
+  "com.hadoop.gplcompression" % "hadoop-lzo" % "0.4.17",
+  "org.twitter4j" % "twitter4j-stream" % "4.0.1"
 )
 
 resolvers ++= Seq(

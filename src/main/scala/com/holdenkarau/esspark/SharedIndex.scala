@@ -44,6 +44,15 @@ object SharedIndex {
     System.setProperty("twitter4j.oauth.consumerSecret", consumerSecret)
     System.setProperty("twitter4j.oauth.accessToken", accessToken)
     System.setProperty("twitter4j.oauth.accessTokenSecret", accessTokenSecret)
+    // https:  all kinds of fun
+    System.setProperty("twitter4j.restBaseURL", "https://api.twitter.com/1.1/")
+    System.setProperty("twitter4j.streamBaseURL", "https://stream.twitter.com/1.1/")
+    System.setProperty("twitter4j.siteStreamBaseURL", "https://sitestream.twitter.com/1.1/")
+    System.setProperty("twitter4j.userStreamBaseURL", "https://userstream.twitter.com/1.1/")
+    System.setProperty("twitter4j.oauth.requestTokenURL", "https://api.twitter.com/oauth/request_token")
+    System.setProperty("twitter4j.oauth.accessTokenURL", "https://api.twitter.com/oauth/access_token")
+    System.setProperty("twitter4j.oauth.authorizationURL", "https://api.twitter.com/oauth/authorize")
+    System.setProperty("twitter4j.oauth.authenticationURL", "https://api.twitter.com/oauth/authenticate")
   }
 
   def fetchTweets(ids: Seq[String]) = {

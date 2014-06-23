@@ -45,7 +45,7 @@ object ReIndexTweets {
     // Convert the MapWritable[Text, Text] to Map[String, String]
     val tweets = currentTweets.map{ case (key, value) => SharedIndex.mapWritableToInput(value) }
     println(tweets.take(5).mkString(":"))
-    val tweet4jtweets = tweets.sample(false, 0.0001).flatMap{ tweet =>
+    val tweet4jtweets = tweets.sample(false, 0.00001).flatMap{ tweet =>
     try {
       val twitter = TwitterFactory.getSingleton()
       val tweetID = tweet.getOrElse("docid", "")
