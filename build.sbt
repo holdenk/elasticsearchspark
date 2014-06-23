@@ -22,7 +22,7 @@ libraryDependencies ++= Seq(
   "com.twitter.elephantbird" % "elephant-bird" % "4.5",
   "com.twitter.elephantbird" % "elephant-bird-core" % "4.5",
   "com.hadoop.gplcompression" % "hadoop-lzo" % "0.4.17",
-  "org.twitter4j" % "twitter4j-stream" % "4.0.1"
+  "org.twitter4j" % "twitter4j-stream" % "3.0.5"
 )
 
 resolvers ++= Seq(
