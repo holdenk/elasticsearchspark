@@ -40,12 +40,14 @@ object IndexTweetsLive {
     val tweets = TwitterUtils.createStream(ssc, None)
     tweets.print()
     // Old way
+    /**
     tweets.foreachRDD{(tweetRDD, time) =>
       val sc = tweetRDD.context
       val jobConf = SharedESConfig.setupEsOnSparkContext(sc, esResource, Some(esNodes))
       val tweetsAsMap = tweetRDD.map(SharedIndex.prepareTweets)
       tweetsAsMap.saveAsHadoopDataset(jobConf)
     }
+    **/
     // New fancy way
     tweets.foreachRDD{(tweetRDD, time) =>
       val sc = tweetRDD.context
@@ -54,7 +56,7 @@ object IndexTweetsLive {
       val tweetsAsCS = createSchemaRDD(tweetRDD.map(SharedIndex.prepareTweetsCaseClass))
       tweetsAsCS.saveToEs(esResource)
     }
-    println1("pandas: sscstart")
+    println("pandas: sscstart")
     ssc.start()
     println("pandas: awaittermination")
     ssc.awaitTermination()

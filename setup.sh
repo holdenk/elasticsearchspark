@@ -1,6 +1,7 @@
 #!/bin/bash
 set -x
 sudo /etc/init.d/elasticsearch start
+curl -XPUT 'http://localhost:9200/twitter/'
 curl -XPUT 'http://localhost:9200/twitter/tweet/_mapping' -d '
 {
     "tweet" : {
