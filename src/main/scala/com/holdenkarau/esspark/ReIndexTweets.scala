@@ -14,6 +14,9 @@ import org.apache.spark.SparkConf
 import org.elasticsearch.hadoop.mr.EsOutputFormat
 import org.elasticsearch.hadoop.mr.EsInputFormat
 import org.elasticsearch.hadoop.cfg.ConfigurationOptions
+// sqlcontext
+import org.apache.spark.sql._
+import org.elasticsearch.spark.sql._
 // Hadoop imports
 import org.apache.hadoop.mapred.{FileOutputCommitter, FileOutputFormat, JobConf, OutputFormat}
 import org.apache.hadoop.fs.Path
@@ -58,6 +61,12 @@ object ReIndexTweets {
     }}
     tweet4jtweets.cache()
     println("Updating "+tweet4jtweets.count())
+    // Old way
     tweet4jtweets.map(SharedIndex.prepareTweets).saveAsHadoopDataset(jobConf)
+    // New way
+    val sqlCtx = new SQLContext(sc)
+    import sqlCtx.createSchemaRDD
+    val tweetsAsCS = createSchemaRDD(tweet4jtweets.map(SharedIndex.prepareTweetsCaseClass))
+    tweetsAsCS.saveToEs(esResource)
   }
 }

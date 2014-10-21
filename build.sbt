@@ -10,14 +10,15 @@ scalaVersion := "2.10.4"
 
 // additional libraries
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % "1.0.0",
-  "org.apache.spark" %% "spark-streaming" % "1.0.0",
-  "org.apache.spark" %% "spark-streaming-twitter" % "1.0.0" excludeAll(ExclusionRule(organization = "org.twitter4j")),
+  "org.apache.spark" %% "spark-core" % "1.1.0",
+  "org.apache.spark" %% "spark-streaming" % "1.1.0",
+  "org.apache.spark" %% "spark-sql" % "1.1.0",
+  "org.apache.spark" %% "spark-streaming-twitter" % "1.1.0" excludeAll(ExclusionRule(organization = "org.twitter4j")),
   "org.apache.commons" % "commons-lang3" % "3.0",
   "org.eclipse.jetty"  % "jetty-client" % "8.1.14.v20131031",
   "com.typesafe.play" % "play-json_2.10" % "2.2.1",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.3.3",
-  "org.elasticsearch" % "elasticsearch-hadoop" % "2.1.0.BUILD-SNAPSHOT-sparkholdenmagic",
+  "org.elasticsearch" % "elasticsearch-hadoop" % "2.1.0.Beta2-holdenmagic",
   "net.sf.opencsv" % "opencsv" % "2.0",
   "com.twitter.elephantbird" % "elephant-bird" % "4.5",
   "com.twitter.elephantbird" % "elephant-bird-core" % "4.5",

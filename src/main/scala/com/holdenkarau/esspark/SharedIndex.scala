@@ -13,6 +13,8 @@ import org.apache.hadoop.io.{MapWritable, Text, NullWritable}
 import twitter4j.Status
 import twitter4j.TwitterFactory
 
+case class tweetCS(docid: String, message: String, hashTags: String, location: Option[String])
+
 object SharedIndex {
   // twitter helper methods
   def prepareTweets(tweet: twitter4j.Status) = {
@@ -36,6 +38,21 @@ object SharedIndex {
       }
     val output = mapToOutput(fields)
     output
+  }
+
+
+  def prepareTweetsCaseClass(tweet: twitter4j.Status) = {
+    tweetCS(tweet.getId().toString, tweet.getText(),
+      tweet.getHashtagEntities().map(_.getText()).mkString(" "),
+      tweet.getGeoLocation() match {
+        case null => None
+        case loc => {
+          val lat = loc.getLatitude()
+          val lon = loc.getLongitude()
+          Some(s"$lat,$lon")
+        }
+      }
+    )
   }
 
   def setupTwitter(consumerKey: String, consumerSecret: String, accessToken: String, accessTokenSecret: String) ={
